@@ -1,10 +1,10 @@
 import express from 'express';
-import fetch from 'node-fetch';
 import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/database.js';
 import chalk from 'chalk';
+import productRoutes from './routes/productRoutes.js';
 
 const app = express();
 dotenv.config();
@@ -23,28 +23,7 @@ app.get('/', (req, res) => {
   res.send('API is working!');
 });
 
-app.get('/api/products', (req, res) => {
-  fetch('https://fakestoreapi.com/products')
-    .then((data) => data.json())
-    .then((parsedData) => res.json(parsedData));
-});
-
-app.get('/api/products/:id', (req, res) => {
-  const id = parseInt(req.params.id) || null;
-
-  if (id != null) {
-    return fetch(`https://fakestoreapi.com/products/${id}`)
-      .then((data) => data.json())
-      .then((parsedData) => {
-        if (parsedData) {
-          res.json(parsedData);
-        } else {
-          res.status(404).send('Cant find item');
-        }
-      });
-  }
-  return res.status(500).send('Server Error');
-});
+app.use('/api/products', productRoutes);
 
 connectDB().then(
   app.listen(PORT, () => {
