@@ -15,7 +15,7 @@ const connectDB = async () => {
       chalk.magenta(`Mongo connected: ${connection.connection.host}`)
     );
   } catch (error) {
-    console.error(error);
+    console.error(chalk.red(error));
     process.exit(1);
   }
 };
