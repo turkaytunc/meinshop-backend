@@ -20,7 +20,10 @@ router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const product = await Product.findById(id);
-    return res.json(product);
+    if (product) res.json(product);
+    else {
+      next(new Error('Request id is not formatted correctly'));
+    }
   } catch (error) {
     console.error(
       chalk.red.bgBlackBright('Cant fetch product with given id from db')
