@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import mongoose from 'mongoose';
 
 const connectDB = async () => {
@@ -10,7 +11,9 @@ const connectDB = async () => {
         useUnifiedTopology: true,
       }
     );
-    console.log(`Mongo connected: ${connection.connection.host}`);
+    console.log(
+      chalk.magenta(`Mongo connected: ${connection.connection.host}`)
+    );
   } catch (error) {
     console.error(error);
     process.exit(1);

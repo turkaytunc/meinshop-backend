@@ -4,10 +4,10 @@ import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/database.js';
+import chalk from 'chalk';
 
 const app = express();
 dotenv.config();
-connectDB();
 
 const { PORT = 5000, NODE_ENV } = process.env;
 
@@ -46,6 +46,8 @@ app.get('/api/products/:id', (req, res) => {
   return res.status(500).send('Server Error');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+connectDB().then(
+  app.listen(PORT, () => {
+    console.log(chalk.magenta(`Server running on http://localhost:${PORT}`));
+  })
+);
