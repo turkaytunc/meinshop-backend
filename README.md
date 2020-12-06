@@ -1,1 +1,1 @@
-# meinshop-backend
+# Meinshop backend

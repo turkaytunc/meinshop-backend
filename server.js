@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 const fetch = require('node-fetch');
+require('dotenv').config();
+
+const { PORT = 5000, NODE_ENV } = process.env;
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -34,6 +37,6 @@ app.get('/api/products/:id', (req, res) => {
   return res.status(500).send('Server Error');
 });
 
-app.listen(5000, () => {
-  console.log('Server running on http://localhost:5000');
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
