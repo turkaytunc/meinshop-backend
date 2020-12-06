@@ -14,16 +14,17 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const product = await Product.findById(id);
-    res.json(product);
+    return res.json(product);
   } catch (error) {
     console.error(
-      chalk.red.bgRedBright('Cant fetch product with given id from db')
+      chalk.red.bgBlackBright('Cant fetch product with given id from db')
     );
-    res.status(500);
+    res.status(404);
+    next(new Error('Internal server error'));
   }
 });
 
