@@ -2,6 +2,11 @@ const express = require('express');
 const app = express();
 const fetch = require('node-fetch');
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 app.get('/', (req, res) => {
   res.send('API is working!');
 });
