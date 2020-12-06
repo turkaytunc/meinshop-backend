@@ -1,9 +1,13 @@
-const express = require('express');
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import connectDB from './config/database.js';
+import chalk from 'chalk';
+import productRoutes from './routes/productRoutes.js';
+
 const app = express();
-const fetch = require('node-fetch');
-const helmet = require('helmet');
-const cors = require('cors');
-require('dotenv').config();
+dotenv.config();
 
 const { PORT = 5000, NODE_ENV } = process.env;
 
@@ -19,29 +23,10 @@ app.get('/', (req, res) => {
   res.send('API is working!');
 });
 
-app.get('/api/products', (req, res) => {
-  fetch('https://fakestoreapi.com/products')
-    .then((data) => data.json())
-    .then((parsedData) => res.json(parsedData));
-});
+app.use('/api/products', productRoutes);
 
-app.get('/api/products/:id', (req, res) => {
-  const id = parseInt(req.params.id) || null;
-
-  if (id != null) {
-    return fetch(`https://fakestoreapi.com/products/${id}`)
-      .then((data) => data.json())
-      .then((parsedData) => {
-        if (parsedData) {
-          res.json(parsedData);
-        } else {
-          res.status(404).send('Cant find item');
-        }
-      });
-  }
-  return res.status(500).send('Server Error');
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+connectDB().then(
+  app.listen(PORT, () => {
+    console.log(chalk.magenta(`Server running on http://localhost:${PORT}`));
+  })
+);
