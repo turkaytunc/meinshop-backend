@@ -5,6 +5,10 @@ import dotenv from 'dotenv';
 import connectDB from './config/database.js';
 import chalk from 'chalk';
 import productRoutes from './routes/productRoutes.js';
+import {
+  errorHandler,
+  notFoundErrorHandler,
+} from './middlewares/errorMiddleware.js';
 
 const app = express();
 dotenv.config();
@@ -27,18 +31,9 @@ app.use('/api/products', productRoutes);
 
 // Error handlers
 
-app.use((req, res, next) => {
-  res.status(404);
-  next(new Error('Page Not Found'));
-});
+app.use(notFoundErrorHandler);
 
-app.use((err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  return res.status(statusCode).json({
-    message: err.message,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : null,
-  });
-});
+app.use(errorHandler);
 
 connectDB().then(
   app.listen(PORT, () => {

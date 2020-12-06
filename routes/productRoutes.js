@@ -8,9 +8,11 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const products = await Product.find({});
-    res.json(products);
+    return res.json(products);
   } catch (error) {
     console.error(chalk.red.bgRedBright('Cant fetch products from db'));
+    res.status(404);
+    next(new Error('Cant get products!'));
   }
 });
 
@@ -24,7 +26,7 @@ router.get('/:id', async (req, res, next) => {
       chalk.red.bgBlackBright('Cant fetch product with given id from db')
     );
     res.status(404);
-    next(new Error('Internal server error'));
+    next(new Error('Product not found!'));
   }
 });
 
