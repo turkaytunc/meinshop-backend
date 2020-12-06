@@ -1,9 +1,11 @@
-const express = require('express');
+import express from 'express';
+import fetch from 'node-fetch';
+import helmet from 'helmet';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
 const app = express();
-const fetch = require('node-fetch');
-const helmet = require('helmet');
-const cors = require('cors');
-require('dotenv').config();
+dotenv.config();
 
 const { PORT = 5000, NODE_ENV } = process.env;
 
