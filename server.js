@@ -3,9 +3,11 @@ import fetch from 'node-fetch';
 import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import connectDB from './config/database.js';
 
 const app = express();
 dotenv.config();
+connectDB();
 
 const { PORT = 5000, NODE_ENV } = process.env;
 
