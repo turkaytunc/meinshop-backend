@@ -8,22 +8,28 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const products = await Product.find({});
-    res.json(products);
+    return res.json(products);
   } catch (error) {
     console.error(chalk.red.bgRedBright('Cant fetch products from db'));
+    res.status(404);
+    next(new Error('Cant get products!'));
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const product = await Product.findById(id);
-    res.json(product);
+    if (product) res.json(product);
+    else {
+      next(new Error('Request id is not formatted correctly'));
+    }
   } catch (error) {
     console.error(
-      chalk.red.bgRedBright('Cant fetch product with given id from db')
+      chalk.red.bgBlackBright('Cant fetch product with given id from db')
     );
-    res.status(500);
+    res.status(404);
+    next(new Error('Product not found!'));
   }
 });
 

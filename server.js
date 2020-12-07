@@ -5,6 +5,10 @@ import dotenv from 'dotenv';
 import connectDB from './config/database.js';
 import chalk from 'chalk';
 import productRoutes from './routes/productRoutes.js';
+import {
+  errorHandler,
+  notFoundErrorHandler,
+} from './middlewares/errorMiddleware.js';
 
 const app = express();
 dotenv.config();
@@ -24,6 +28,12 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/products', productRoutes);
+
+// Error handlers
+
+app.use(notFoundErrorHandler);
+
+app.use(errorHandler);
 
 connectDB().then(
   app.listen(PORT, () => {
